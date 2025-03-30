@@ -150,7 +150,7 @@ def index():
             flash(f"An error occurred: {str(e)}")
             return redirect(url_for('index'))  # Reload the form page
 
-    return render_template('form.html')
+    return render_template('index.html')
 
 @app.route('/download')
 def download_page():

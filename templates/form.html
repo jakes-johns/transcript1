@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Transcript Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Student Transcript Generator</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/" method="post">
+            <h3>Common Details</h3>
+            <label>School Name</label>
+            <input type="text" name="school_name" required>
+            
+            <label>Semester</label>
+            <input type="text" name="semester" required>
+            
+            <label>Class Name</label>
+            <input type="text" name="class_name" required>
+
+            <label>General Remarks</label>
+            <textarea name="remarks" required></textarea>
+
+            <h3>Subjects</h3>
+            <div id="subject-container"></div>
+            <button type="button" onclick="addSubject()">+ Add Subject</button>
+
+            <h3>Student Data</h3>
+            <div id="student-container"></div>
+            <button type="button" onclick="addStudent()">+ Add Student</button>
+
+            <h3>Approvals</h3>
+            <label>Class Coordinator Name</label>
+            <input type="text" name="coordinator_name" required>
+
+            <label>Coordinator Signature</label>
+            <input type="text" name="coordinator_sign">
+
+            <label>Coordinator Date</label>
+            <input type="date" name="coordinator_date" required>
+
+            <label>Head of Department Name</label>
+            <input type="text" name="hod_name" required>
+
+            <label>HOD Signature</label>
+            <input type="text" name="hod_sign">
+
+            <label>HOD Date</label>
+            <input type="date" name="hod_date" required>
+
+            <button type="submit">Generate Transcripts</button>
+        </form>
+    </div>
+
+    <script>
+        function addSubject() {
+            let container = document.getElementById('subject-container');
+            let div = document.createElement('div');
+            div.innerHTML = `<input type="text" name="subject_code[]" placeholder="Subject Code" required>
+                             <input type="text" name="subject[]" placeholder="Subject Name" required>`;
+            container.appendChild(div);
+        }
+
+        function addStudent() {
+            let studentContainer = document.getElementById('student-container');
+            let index = studentContainer.children.length;
+            let studentDiv = document.createElement('div');
+
+            studentDiv.innerHTML = `
+                <input type="text" name="student_name[]" placeholder="Student Name" required>
+                <input type="text" name="reg_no[]" placeholder="Registration Number" required>
+                <div id="marks-container-${index}">
+                    <h4>Marks</h4>
+                </div>
+                <button type="button" onclick="addMarks(${index})">+ Add Marks</button>
+            `;
+
+            studentContainer.appendChild(studentDiv);
+        }
+
+        function addMarks(studentIndex) {
+            let marksContainer = document.getElementById(`marks-container-${studentIndex}`);
+            let marksDiv = document.createElement('div');
+            marksDiv.innerHTML = `<input type="text" name="marks_${studentIndex}[]" placeholder="Enter Marks" required>`;
+            marksContainer.appendChild(marksDiv);
+        }
+    </script>
+</body>
+</html>

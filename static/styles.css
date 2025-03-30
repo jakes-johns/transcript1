@@ -1,0 +1,167 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Body Styling */
+body {
+    background: linear-gradient(to right, #2c3e50, #4ca1af);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Section Headers */
+h3 {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 5px;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+label {
+    font-size: 14px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* Input Fields */
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s ease-in-out;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Placeholder Text */
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Focused Input Fields */
+input:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Button Styling */
+button {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+    transition: 0.3s ease-in-out;
+}
+
+/* Button Hover */
+button:hover {
+    background: #45a049;
+    box-shadow: 0px 4px 10px rgba(0, 255, 0, 0.2);
+}
+
+/* Button for Adding Inputs */
+button[type="button"] {
+    background: #3498db;
+}
+
+button[type="button"]:hover {
+    background: #2980b9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 20px;
+    }
+}
+
+/* Subjects and Students Container */
+#subject-container, #student-container {
+    margin-top: 10px;
+}
+
+/* Input Groups */
+#subject-container div, #student-container div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Input Fields Inside Dynamic Sections */
+#subject-container input, #student-container input {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background: #e74c3c;
+}
+
+button[type="submit"]:hover {
+    background: #c0392b;
+}
+
+/* Translucent Effect */
+.container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Fade-in Effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

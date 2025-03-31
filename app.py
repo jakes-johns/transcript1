@@ -3,7 +3,7 @@ import zipfile
 import os
 from fpdf import FPDF
 
-app = Flask(__name__, template_folder="../templates", static_folder="../static")  # Set correct template path)
+app = Flask(__name__)  # Set correct template path)
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
 
 # Function to calculate grades and remarks

@@ -8,7 +8,8 @@
 
 /* Body Styling */
 body {
-    background: linear-gradient(to right, #2c3e50, #4ca1af);
+    /* background: linear-gradient(to right, #2c3e50, #4ca1af); */
+    background: linear-gradient(to right, #640303, #aa9f07);
     color: #fff;
     display: flex;
     justify-content: center;
@@ -17,6 +18,18 @@ body {
     padding: 20px;
 }
 
+footer {
+    padding: 10px;
+    background: linear-gradient(to right,  #aa9f07, #640303);
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 20px;
+    color: aliceblue;
+}
+footer a {
+    text-decoration: none;
+    color: aliceblue;
+}
 /* Container */
 .container {
     background: rgba(255, 255, 255, 0.1);
@@ -142,11 +155,12 @@ button[type="button"]:hover {
 
 /* Submit Button */
 button[type="submit"] {
-    background: #e74c3c;
+    background: #05b13e;
 }
 
 button[type="submit"]:hover {
-    background: #c0392b;
+    background: #045e22;
+    /* #c0392b */
 }
 
 /* Translucent Effect */

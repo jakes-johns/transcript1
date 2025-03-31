@@ -82,6 +82,25 @@ def index():
                 pdf.add_page()
                 pdf.set_font('Arial', 'B', 12)
 
+                # Add watermarks
+                watermark_top_right = "watermark1.png"  # First watermark (top right)
+                watermark_bottom = "watermark2.png"  # Second watermark (bottom)
+
+               # Define different sizes for each watermark
+                top_right_width = 80  # Width for top right watermark
+                top_right_height = 30  # Height for top right watermark
+
+                bottom_width = pdf.w  # Width for bottom watermark
+                bottom_height = 30  # Height for bottom watermark
+
+                # Add the first watermark (top-right corner, touching borders)
+                if os.path.exists(watermark_top_right):
+                    pdf.image(watermark_top_right, x=pdf.w - top_right_width, y=0, w=top_right_width, h=top_right_height)
+
+                # Add the second watermark (full-width bottom)
+                if os.path.exists(watermark_bottom):
+                    pdf.image(watermark_bottom, x=0, y=pdf.h - bottom_height, w=bottom_width, h=bottom_height)
+
                 # Add school logo (ensure file exists)
                 logo_path = 'kmtc_logo.jpeg'  # Update with correct path
                 if os.path.exists(logo_path):

@@ -91,7 +91,7 @@ def index():
                 top_right_height = 30  # Height for top right watermark
 
                 bottom_width = pdf.w  # Width for bottom watermark
-                bottom_height = 30  # Height for bottom watermark
+                bottom_height = 30  # Height for bottom watermark.
 
                 # Add the first watermark (top-right corner, touching borders)
                 if os.path.exists(watermark_top_right):

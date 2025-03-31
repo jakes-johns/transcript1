@@ -32,8 +32,11 @@ def index():
         try:
             # Get common details (same for all students)
             school_name = request.form.get('school_name', 'Unknown School')
+            department = request.form.get('department', 'UNKNOWN DEPARTMENT')
+            year = request.form.get('year', 'unknown year')
             semester = request.form.get('semester', 'Unknown Semester')
             class_name = request.form.get('class_name', 'Unknown Class')
+            transcript_date = request.form.get('transcript_date', 'N/A')
             remarks = request.form.get('remarks', 'No remarks provided')
             coordinator_name = request.form.get('coordinator_name', 'N/A')
             coordinator_sign = request.form.get('coordinator_sign', 'N/A')
@@ -80,7 +83,7 @@ def index():
                 pdf.set_font('Arial', 'B', 12)
 
                 # Add school logo (ensure file exists)
-                logo_path = 'school_logo.jpg'  # Update with correct path
+                logo_path = 'kmtc_logo.jpeg'  # Update with correct path
                 if os.path.exists(logo_path):
                     page_width = pdf.w
                     logo_width = 50  # Adjust based on logo size
@@ -94,9 +97,15 @@ def index():
 
                 # Add School Name Below the Logo
                 pdf.ln(logo_height + 5)  # Move down after logo
-                pdf.cell(200, 10, school_name, ln=True, align='C')
-                pdf.cell(200, 10, f"Student Transcript - {semester}", ln=True, align='C')
-                pdf.cell(200, 10, f"Name: {student_name}             Reg No: {reg_no}        Class: {class_name}", ln=True, align='C')
+                pdf.cell(200, 5, f"KENYA MEDICAL TRAINING COLLEGE", ln=True, align='C')
+                pdf.cell(200, 5, f"QUALITY MANAGEMENT SYSTEMS", ln=True, align='C')
+                pdf.cell(200, 5, f"ASSESSMENT OF STUDENT'S LEARNING", ln=True, align='C')
+                pdf.cell(200, 5, f"DEPARTMENT OF {department}", ln=True, align='C')
+                pdf.cell(200, 5, f"INDIVIDUAL STUDENT'S SCORE SHEET", ln=True, align='C')
+                pdf.cell(200, 5, f"SEMESTER {semester}", ln=True, align='C')
+                pdf.cell(200, 5, f"COLLEGE {school_name}", ln=True)
+                pdf.cell(200, 5, f"Name: {student_name}             College No.: {reg_no}", ln=True)
+                pdf.cell(200, 5, f"Class: {class_name}             YEAR OF STUDY: {year} ", ln=True)
                 pdf.ln(10)
 
                 # Table headers
@@ -111,11 +120,11 @@ def index():
                 # Table content
                 pdf.set_font('Arial', '', 10)
                 for code, subj, mark, grade, remark in results:
-                    pdf.cell(30, 10, code, 1)
-                    pdf.cell(60, 10, subj, 1)
-                    pdf.cell(30, 10, str(mark), 1)
-                    pdf.cell(30, 10, grade, 1)
-                    pdf.cell(40, 10, remark, 1)
+                    pdf.cell(30, 10, code, 1, align='C')
+                    pdf.cell(60, 10, subj, 1, align='C')
+                    pdf.cell(30, 10, str(mark), 1, align='C')
+                    pdf.cell(30, 10, grade, 1, align='C')
+                    pdf.cell(40, 10, remark, 1, align='C')
                     pdf.ln()
                 # Add total row
                 pdf.set_font('Arial', 'B', 10)  # Bold for emphasis
@@ -133,13 +142,13 @@ def index():
                 pdf.ln()
 
                 pdf.ln(10)
-                pdf.cell(200, 10, f"Total Marks: {total_marks} | Average Marks: {average_marks}", ln=True)
-                pdf.cell(200, 10, f"Remarks: {remarks}", ln=True)
-                pdf.cell(200, 10, f"Class Coordinator: {coordinator_name} | Sign: {coordinator_sign} | Date: {coordinator_date}", ln=True)
-                pdf.cell(200, 10, f"Head of Department: {hod_name} | Sign: {hod_sign} | Date: {hod_date}", ln=True)
+                # pdf.cell(200, 10, f"Total Marks: {total_marks} | Average Marks: {average_marks}", ln=True)
+                pdf.cell(200, 3, f"REMARKS: {remarks}", ln=True)
+                pdf.cell(200, 3, f"CLASS COORDINATOR: {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
+                pdf.cell(200, 3, f"HEAD OF DEPARTMENT: {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
 
-                reg_no = sanitize_filename(reg_nos[i].strip())  # Sanitize reg_no before use
-                pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{reg_no}.pdf')
+                sanitized_reg_no = sanitize_filename(reg_no)  # Use only for the filename
+                pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{sanitized_reg_no}.pdf')
 
                 print(f"Saving transcript to: {pdf_output}")  # Debugging statement
 

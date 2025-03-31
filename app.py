@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, send_file, flash, redirect, url_for
 import zipfile
 import os
+import re
 from fpdf import FPDF
 
 app = Flask(__name__)  # Set correct template path)
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
+
+def sanitize_filename(filename):
+    """Remove or replace invalid characters in filenames."""
+    return re.sub(r'[^\w\d-]', '_', filename)  # Replace special characters with '_'
 
 # Function to calculate grades and remarks
 def calculate_grade(marks):
@@ -62,7 +67,7 @@ def index():
             transcript_files = []
             for i in range(len(student_names)):
                 student_name = student_names[i]
-                reg_no = reg_nos[i]
+                reg_no = reg_nos[i].strip()  # Keep Reg No unchanged inside the transcript
                 marks = marks_list[i]
 
                 total_marks = sum(marks)
@@ -133,7 +138,18 @@ def index():
                 pdf.cell(200, 10, f"Class Coordinator: {coordinator_name} | Sign: {coordinator_sign} | Date: {coordinator_date}", ln=True)
                 pdf.cell(200, 10, f"Head of Department: {hod_name} | Sign: {hod_sign} | Date: {hod_date}", ln=True)
 
+                reg_no = sanitize_filename(reg_nos[i].strip())  # Sanitize reg_no before use
                 pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{reg_no}.pdf')
+
+                print(f"Saving transcript to: {pdf_output}")  # Debugging statement
+
+                pdf.output(pdf_output)
+
+                if os.path.exists(pdf_output):
+                    print(f"Transcript saved successfully: {pdf_output}")
+                else:
+                    print(f"Error: File not created - {pdf_output}")
+
                 pdf.output(pdf_output)
                 transcript_files.append(pdf_output)
 
@@ -141,7 +157,11 @@ def index():
             zip_filename = "transcripts.zip"
             with zipfile.ZipFile(zip_filename, 'w') as zipf:
                 for file in transcript_files:
-                    zipf.write(file, os.path.basename(file))  # Add file to ZIP
+                    if os.path.exists(file):  # Ensure file exists before adding to ZIP
+                        zipf.write(file, os.path.basename(file))
+                    else:
+                        print(f"Skipping missing file: {file}")  # Debugging statement
+
 
             flash("Transcripts generated successfully! Download below.")
             return redirect(url_for('download_page'))  # Redirect to download page

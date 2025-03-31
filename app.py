@@ -103,7 +103,7 @@ def index():
                 pdf.cell(200, 5, f"DEPARTMENT OF {department}", ln=True, align='C')
                 pdf.cell(200, 5, f"INDIVIDUAL STUDENT'S SCORE SHEET", ln=True, align='C')
                 pdf.cell(200, 5, f"SEMESTER {semester}", ln=True, align='C')
-                pdf.cell(200, 5, f"COLLEGE {school_name}", ln=True)
+                pdf.cell(200, 5, f"COLLEGE: {school_name}", ln=True)
                 pdf.cell(200, 5, f"Name: {student_name}             College No.: {reg_no}", ln=True)
                 pdf.cell(200, 5, f"Class: {class_name}             YEAR OF STUDY: {year} ", ln=True)
                 pdf.ln(10)
@@ -120,32 +120,32 @@ def index():
                 # Table content
                 pdf.set_font('Arial', '', 10)
                 for code, subj, mark, grade, remark in results:
-                    pdf.cell(30, 10, code, 1, align='C')
-                    pdf.cell(60, 10, subj, 1, align='C')
-                    pdf.cell(30, 10, str(mark), 1, align='C')
-                    pdf.cell(30, 10, grade, 1, align='C')
-                    pdf.cell(40, 10, remark, 1, align='C')
+                    pdf.cell(30, 7, code, 1, align='C')
+                    pdf.cell(60, 7, subj, 1, align='C')
+                    pdf.cell(30, 7, str(mark), 1, align='C')
+                    pdf.cell(30, 7, grade, 1, align='C')
+                    pdf.cell(40, 7, remark, 1, align='C')
                     pdf.ln()
                 # Add total row
                 pdf.set_font('Arial', 'B', 10)  # Bold for emphasis
-                pdf.cell(90, 10, 'TOTAL', 1)
-                pdf.cell(30, 10, str(total_marks), 1, align='C')
-                pdf.cell(30, 10, '', 1)  # Empty grade column for total
-                pdf.cell(40, 10, '', 1)  # Empty remarks column for total
+                pdf.cell(90, 8, 'TOTAL', 1)
+                pdf.cell(30, 8, str(total_marks), 1, align='C')
+                pdf.cell(30, 8, '', 1)  # Empty grade column for total
+                pdf.cell(40, 8, '', 1)  # Empty remarks column for total
                 pdf.ln()
 
                 # Add average row with grade and remarks
-                pdf.cell(90, 10, 'AVERAGE', 1)
-                pdf.cell(30, 10, str(average_marks), 1, align='C')
-                pdf.cell(30, 10, grade, 1, align='C')
-                pdf.cell(40, 10, remark, 1, align='C')
+                pdf.cell(90, 8, 'AVERAGE', 1)
+                pdf.cell(30, 8, str(average_marks), 1, align='C')
+                pdf.cell(30, 8, grade, 1, align='C')
+                pdf.cell(40, 8, remark, 1, align='C')
                 pdf.ln()
 
                 pdf.ln(10)
                 # pdf.cell(200, 10, f"Total Marks: {total_marks} | Average Marks: {average_marks}", ln=True)
-                pdf.cell(200, 3, f"REMARKS: {remarks}", ln=True)
-                pdf.cell(200, 3, f"CLASS COORDINATOR: {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
-                pdf.cell(200, 3, f"HEAD OF DEPARTMENT: {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
+                pdf.cell(200, 5, f"REMARKS: {remarks}", ln=True)
+                pdf.cell(200, 5, f"CLASS COORDINATOR: {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
+                pdf.cell(200, 5, f"HEAD OF DEPARTMENT: {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
 
                 sanitized_reg_no = sanitize_filename(reg_no)  # Use only for the filename
                 pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{sanitized_reg_no}.pdf')

@@ -101,7 +101,7 @@ def index():
 
                # Define different sizes for each watermark
                 top_right_width = 80  # Width for top right watermark
-                top_right_height = 35  # Height for top right watermark
+                top_right_height = 31  # Height for top right watermark
 
                 bottom_width = pdf.w  # Width for bottom watermark
                 bottom_height = 30  # Height for bottom watermark.

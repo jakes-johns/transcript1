@@ -184,13 +184,17 @@ def index():
                 # General Remarks
                 pdf.cell(200, 8, f"General Remarks By Class Coordinator: {remarks}", ln=True)
 
+                # Student Signature
+                pdf.cell(100, 8, f"STUDENT'S SIGN:............................................................", ln=False)
+                pdf.cell(50, 8, f"DATE:.............................", ln=True)
+
                 # Class Coordinator Line
-                pdf.cell(100, 8, f"CLASS COORDINATOR: {coordinator_name}", ln=False)  # Fixed width for name
+                pdf.cell(100, 8, f"CLASS COORDINATOR:   {coordinator_name}", ln=False)  # Fixed width for name
                 pdf.cell(50, 8, f"SIGN:..............................", ln=False)  # Fixed width for signature
                 pdf.cell(40, 8, f"DATE: {coordinator_date}", ln=True)  # Moves to next line after date
 
                 # Head of Department Line
-                pdf.cell(100, 5, f"HEAD OF DEPARTMENT: {hod_name}", ln=False)  # Same width as Coordinator
+                pdf.cell(100, 5, f"HEAD OF DEPARTMENT:   {hod_name}", ln=False)  # Same width as Coordinator
                 pdf.cell(50, 5, f"SIGN:..............................", ln=False)  # Same width as Coordinator SIGN
                 pdf.cell(40, 5, f"DATE: {hod_date}", ln=True)  # Moves to next line after date
 

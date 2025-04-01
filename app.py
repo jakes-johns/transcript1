@@ -3,6 +3,8 @@ import zipfile
 import os
 import re
 from fpdf import FPDF
+from pathlib import Path
+
 
 app = Flask(__name__)  # Set correct template path)
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
@@ -83,9 +85,10 @@ def index():
                 pdf.set_font('Arial', 'B', 12)
 
                 # Add watermarks
-                watermark_top_right = "watermark1.png"  # First watermark (top right)
-                watermark_bottom = "watermark2.png"  # Second watermark (bottom)
-
+                BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the current script directory
+                watermark_top_right = os.path.join(BASE_DIR, "static", "watermark1.png")
+                watermark_bottom = os.path.join(BASE_DIR, "static", "watermark2.png")
+                
                # Define different sizes for each watermark
                 top_right_width = 80  # Width for top right watermark
                 top_right_height = 30  # Height for top right watermark

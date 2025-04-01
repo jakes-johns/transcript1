@@ -101,7 +101,7 @@ def index():
 
                # Define different sizes for each watermark
                 top_right_width = 80  # Width for top right watermark
-                top_right_height = 30  # Height for top right watermark
+                top_right_height = 35  # Height for top right watermark
 
                 bottom_width = pdf.w  # Width for bottom watermark
                 bottom_height = 30  # Height for bottom watermark.
@@ -135,9 +135,10 @@ def index():
                 pdf.cell(200, 5, f"DEPARTMENT OF {department}", ln=True, align='C')
                 pdf.cell(200, 5, f"INDIVIDUAL STUDENT'S SCORE SHEET", ln=True, align='C')
                 pdf.cell(200, 5, f"SEMESTER {semester}", ln=True, align='C')
-                pdf.cell(200, 5, f"COLLEGE: {school_name}", ln=True)
-                pdf.cell(200, 5, f"Name: {student_name}             College No.: {reg_no}", ln=True)
-                pdf.cell(200, 5, f"Class: {class_name}             YEAR OF STUDY: {year} ", ln=True)
+                pdf.cell(200, 5, f"College:  {school_name}", ln=True)
+                pdf.cell(200, 5, f"Name:  {student_name}             College No.:  {reg_no}", ln=True)
+                pdf.cell(200, 5, f"Class:  {class_name}               Year Of Study:  {year} ", ln=True)
+                pdf.cell(200, 5, f"Date:  {transcript_date}", ln=True)
                 pdf.ln(10)
 
                 # Table headers
@@ -173,11 +174,11 @@ def index():
                 pdf.cell(40, 8, remark, 1, align='C')
                 pdf.ln()
 
-                pdf.ln(10)
+                pdf.ln(5)
                 # pdf.cell(200, 10, f"Total Marks: {total_marks} | Average Marks: {average_marks}", ln=True)
-                pdf.cell(200, 5, f"REMARKS: {remarks}", ln=True)
-                pdf.cell(200, 5, f"CLASS COORDINATOR: {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
-                pdf.cell(200, 5, f"HEAD OF DEPARTMENT: {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
+                pdf.cell(200, 5, f"General Remarks By Class Coordinator: {remarks}", ln=True)
+                pdf.cell(200, 5, f"CLASS COORDINATOR:  {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
+                pdf.cell(200, 5, f"HEAD OF DEPARTMENT:  {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
 
                 sanitized_reg_no = sanitize_filename(reg_no)  # Use only for the filename
                 pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{sanitized_reg_no}.pdf')

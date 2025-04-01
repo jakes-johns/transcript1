@@ -86,8 +86,11 @@ def index():
 
                 # Add watermarks
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the current script directory
-                watermark_top_right = os.path.join(BASE_DIR, "static", "watermark1.png")
-                watermark_bottom = os.path.join(BASE_DIR, "static", "watermark2.png")
+                watermark_top_right = os.path.join(BASE_DIR, "static", "watermark1.PNG")
+                watermark_bottom = os.path.join(BASE_DIR, "static", "watermark2.PNG")
+
+                print(f"Checking: {watermark_top_right} -> Exists? {os.path.exists(watermark_top_right)}")
+                print(f"Checking: {watermark_bottom} -> Exists? {os.path.exists(watermark_bottom)}")
 
                 # debugging statement for watermark
                 if not os.path.exists(watermark_top_right):
@@ -95,7 +98,7 @@ def index():
 
                 if not os.path.exists(watermark_bottom):
                     print(f"Error: {watermark_bottom} not found!")
-                    
+
                # Define different sizes for each watermark
                 top_right_width = 80  # Width for top right watermark
                 top_right_height = 30  # Height for top right watermark

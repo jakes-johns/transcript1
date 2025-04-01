@@ -41,10 +41,10 @@ def index():
             transcript_date = request.form.get('transcript_date', 'N/A')
             remarks = request.form.get('remarks', 'No remarks provided')
             coordinator_name = request.form.get('coordinator_name', 'N/A')
-            coordinator_sign = request.form.get('coordinator_sign', 'N/A')
+            # coordinator_sign = request.form.get('coordinator_sign', 'N/A')
             coordinator_date = request.form.get('coordinator_date', 'N/A')
             hod_name = request.form.get('hod_name', 'N/A')
-            hod_sign = request.form.get('hod_sign', 'N/A')
+            # hod_sign = request.form.get('hod_sign', 'N/A')
             hod_date = request.form.get('hod_date', 'N/A')
 
             # Get subject codes and names
@@ -136,10 +136,15 @@ def index():
                 pdf.cell(200, 5, f"INDIVIDUAL STUDENT'S SCORE SHEET", ln=True, align='C')
                 pdf.cell(200, 5, f"SEMESTER {semester}", ln=True, align='C')
                 pdf.cell(200, 5, f"College:  {school_name}", ln=True)
-                pdf.cell(200, 5, f"Name:  {student_name}             College No.:  {reg_no}", ln=True)
-                pdf.cell(200, 5, f"Class:  {class_name}               Year Of Study:  {year} ", ln=True)
+
+                pdf.cell(100, 5, f"Name:  {student_name}", ln=False)
+                pdf.cell(100, 5, f"College No.:  {reg_no}", ln=True)
+
+                pdf.cell(100, 5, f"Class:  {class_name}", ln=False)
+                pdf.cell(100, 5, f"Year Of Study:  {year}", ln=True)
+
                 pdf.cell(200, 5, f"Date:  {transcript_date}", ln=True)
-                pdf.ln(10)
+                pdf.ln(5)
 
                 # Table headers
                 pdf.set_font('Arial', 'B', 10)
@@ -174,11 +179,20 @@ def index():
                 pdf.cell(40, 8, remark, 1, align='C')
                 pdf.ln()
 
-                pdf.ln(5)
-                # pdf.cell(200, 10, f"Total Marks: {total_marks} | Average Marks: {average_marks}", ln=True)
-                pdf.cell(200, 5, f"General Remarks By Class Coordinator: {remarks}", ln=True)
-                pdf.cell(200, 5, f"CLASS COORDINATOR:  {coordinator_name}       SIGN: {coordinator_sign}        DATE: {coordinator_date}", ln=True)
-                pdf.cell(200, 5, f"HEAD OF DEPARTMENT:  {hod_name}       SIGN: {hod_sign}        DATE: {hod_date}", ln=True)
+                pdf.ln(3)
+                
+                # General Remarks
+                pdf.cell(200, 8, f"General Remarks By Class Coordinator: {remarks}", ln=True)
+
+                # Class Coordinator Line
+                pdf.cell(100, 8, f"CLASS COORDINATOR: {coordinator_name}", ln=False)  # Fixed width for name
+                pdf.cell(50, 8, f"SIGN:..............................", ln=False)  # Fixed width for signature
+                pdf.cell(40, 8, f"DATE: {coordinator_date}", ln=True)  # Moves to next line after date
+
+                # Head of Department Line
+                pdf.cell(100, 5, f"HEAD OF DEPARTMENT: {hod_name}", ln=False)  # Same width as Coordinator
+                pdf.cell(50, 5, f"SIGN:..............................", ln=False)  # Same width as Coordinator SIGN
+                pdf.cell(40, 5, f"DATE: {hod_date}", ln=True)  # Moves to next line after date
 
                 sanitized_reg_no = sanitize_filename(reg_no)  # Use only for the filename
                 pdf_output = os.path.join(TEMP_FOLDER, f'transcript_{sanitized_reg_no}.pdf')

@@ -172,11 +172,12 @@ def index():
                 pdf.cell(40, 8, '', 1)  # Empty remarks column for total
                 pdf.ln()
 
-                # Add average row with grade and remarks
+               # Add average row with grade and remarks
+                average_grade, average_remark = calculate_grade(average_marks)  # Fix missing grading for average
                 pdf.cell(90, 8, 'AVERAGE', 1)
                 pdf.cell(30, 8, str(average_marks), 1, align='C')
-                pdf.cell(30, 8, grade, 1, align='C')
-                pdf.cell(40, 8, remark, 1, align='C')
+                pdf.cell(30, 8, average_grade, 1, align='C')
+                pdf.cell(40, 8, average_remark, 1, align='C')
                 pdf.ln()
 
                 pdf.ln(3)

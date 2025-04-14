@@ -146,7 +146,7 @@ def index():
                 pdf.cell(120, 5, f"Class:  {class_name}", ln=False)
                 pdf.cell(80, 5, f"Year Of Study:  {year}", ln=True)
 
-                pdf.cell(120, 5, f"Program:  {program}", ln=True)
+                pdf.cell(120, 5, f"Program:  {program}", ln=False)
                 pdf.cell(80, 5, f"Date:  {transcript_date}", ln=True)
                 pdf.ln(3)
 

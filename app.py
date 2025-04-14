@@ -13,7 +13,7 @@ def sanitize_filename(filename):
     """Remove or replace invalid characters in filenames."""
     return re.sub(r'[^\w\d-]', '_', filename)  # Replace special characters with '_'
 
-# Function to calculate grades and remarks
+# Function to calculate grades and remarks.
 def calculate_grade(marks):
     if marks <= 0:
         return '-', 'NOT DONE'

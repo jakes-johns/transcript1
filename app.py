@@ -15,7 +15,9 @@ def sanitize_filename(filename):
 
 # Function to calculate grades and remarks
 def calculate_grade(marks):
-    if marks < 50:
+    if marks <= 0:
+        return '-', 'NOT DONE'
+    elif 1 <= marks <= 49:
         return 'D', 'FAIL'
     elif 50 <= marks <= 64:
         return 'C', 'PASS'

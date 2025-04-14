@@ -35,6 +35,7 @@ def index():
             # Get common details (same for all students)
             school_name = request.form.get('school_name', 'Unknown School')
             department = request.form.get('department', 'UNKNOWN DEPARTMENT')
+            program = request.form.get('program', 'UNKNOWN PROGRAM')
             year = request.form.get('year', 'unknown year')
             semester = request.form.get('semester', 'Unknown Semester')
             class_name = request.form.get('class_name', 'Unknown Class')
@@ -137,31 +138,32 @@ def index():
                 pdf.cell(200, 5, f"SEMESTER {semester}", ln=True, align='C')
                 pdf.cell(200, 5, f"College:  {school_name}", ln=True)
 
-                pdf.cell(100, 5, f"Name:  {student_name}", ln=False)
-                pdf.cell(100, 5, f"College No.:  {reg_no}", ln=True)
+                pdf.cell(120, 5, f"Name:  {student_name}", ln=False)
+                pdf.cell(80, 5, f"College No.:  {reg_no}", ln=True)
 
-                pdf.cell(100, 5, f"Class:  {class_name}", ln=False)
-                pdf.cell(100, 5, f"Year Of Study:  {year}", ln=True)
+                pdf.cell(120, 5, f"Class:  {class_name}", ln=False)
+                pdf.cell(80, 5, f"Year Of Study:  {year}", ln=True)
 
-                pdf.cell(200, 5, f"Date:  {transcript_date}", ln=True)
-                pdf.ln(5)
+                pdf.cell(120, 5, f"Program:  {program}", ln=True)
+                pdf.cell(80, 5, f"Date:  {transcript_date}", ln=True)
+                pdf.ln(3)
 
                 # Table headers
                 pdf.set_font('Arial', 'B', 10)
-                pdf.cell(30, 10, 'Code', 1)
-                pdf.cell(60, 10, 'Subject', 1)
-                pdf.cell(30, 10, 'Marks', 1)
-                pdf.cell(30, 10, 'Grade', 1)
-                pdf.cell(40, 10, 'Remarks', 1)
+                pdf.cell(30, 10, 'CODE', 1) #edited the name
+                pdf.cell(70, 10, 'MODULE', 1) #edited the row width and name 60 to 70
+                pdf.cell(30, 10, 'MARKS', 1)
+                pdf.cell(20, 10, 'GRADE', 1) #edited the row width from 30 to 20
+                pdf.cell(40, 10, 'REMARKS', 1)
                 pdf.ln()
 
                 # Table content
                 pdf.set_font('Arial', '', 10)
                 for code, subj, mark, grade, remark in results:
                     pdf.cell(30, 7, code, 1, align='C')
-                    pdf.cell(60, 7, subj, 1, align='C')
+                    pdf.cell(70, 7, subj, 1, align='C') #edited the row width and name 60 to 70
                     pdf.cell(30, 7, str(mark), 1, align='C')
-                    pdf.cell(30, 7, grade, 1, align='C')
+                    pdf.cell(20, 7, grade, 1, align='C') #edited the row width from 30 to 20
                     pdf.cell(40, 7, remark, 1, align='C')
                     pdf.ln()
                 # Add total row
@@ -180,19 +182,19 @@ def index():
                 pdf.cell(40, 8, average_remark, 1, align='C')
                 pdf.ln()
 
-                pdf.ln(3)
+                pdf.ln(1)
                 
                 # General Remarks
-                pdf.cell(200, 8, f"General Remarks By Class Coordinator: {remarks}", ln=True)
+                pdf.cell(200, 7, f"General Remarks By Class Coordinator: {remarks}", ln=True)
 
                 # Student Signature
-                pdf.cell(100, 8, f"STUDENT'S SIGN:............................................................", ln=False)
-                pdf.cell(50, 8, f"DATE:.............................", ln=True)
+                pdf.cell(100, 7, f"STUDENT'S SIGN:............................................................", ln=False)
+                pdf.cell(50, 7, f"DATE:.............................", ln=True)
 
                 # Class Coordinator Line
-                pdf.cell(100, 8, f"CLASS COORDINATOR:   {coordinator_name}", ln=False)  # Fixed width for name
-                pdf.cell(50, 8, f"SIGN:..............................", ln=False)  # Fixed width for signature
-                pdf.cell(40, 8, f"DATE: {coordinator_date}", ln=True)  # Moves to next line after date
+                pdf.cell(100, 7, f"CLASS COORDINATOR:   {coordinator_name}", ln=False)  # Fixed width for name
+                pdf.cell(50, 7, f"SIGN:..............................", ln=False)  # Fixed width for signature
+                pdf.cell(40, 7, f"DATE: {coordinator_date}", ln=True)  # Moves to next line after date
 
                 # Head of Department Line
                 pdf.cell(100, 5, f"HEAD OF DEPARTMENT:   {hod_name}", ln=False)  # Same width as Coordinator

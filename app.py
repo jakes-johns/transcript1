@@ -170,17 +170,17 @@ def index():
                     pdf.ln()
                 # Add total row
                 pdf.set_font('Arial', 'B', 10)  # Bold for emphasis
-                pdf.cell(90, 8, 'TOTAL', 1)
+                pdf.cell(100, 8, 'TOTAL', 1)
                 pdf.cell(30, 8, str(total_marks), 1, align='C')
-                pdf.cell(30, 8, '', 1)  # Empty grade column for total
+                pdf.cell(20, 8, '', 1)  # Empty grade column for total
                 pdf.cell(40, 8, '', 1)  # Empty remarks column for total
                 pdf.ln()
 
                # Add average row with grade and remarks
                 average_grade, average_remark = calculate_grade(average_marks)  # Fix missing grading for average
-                pdf.cell(90, 8, 'AVERAGE', 1)
+                pdf.cell(100, 8, 'AVERAGE', 1)
                 pdf.cell(30, 8, str(average_marks), 1, align='C')
-                pdf.cell(30, 8, average_grade, 1, align='C')
+                pdf.cell(20, 8, average_grade, 1, align='C')
                 pdf.cell(40, 8, average_remark, 1, align='C')
                 pdf.ln()
 

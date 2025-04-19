@@ -146,14 +146,14 @@ def index():
                 pdf.cell(120, 5, f"Class:  {class_name}", ln=False)
                 pdf.cell(80, 5, f"Year Of Study:  {year}", ln=True)
 
-                pdf.cell(120, 5, f"Program:  {program}", ln=False)
-                pdf.cell(80, 5, f"Date:  {transcript_date}", ln=True)
+                # pdf.cell(120, 5, f"Program:  {program}", ln=False)
+                pdf.cell(200, 5, f"Date:  {transcript_date}", ln=True)  #CHANGED THE MEASUREMNTS FROM 80,5 TO 200,5
                 pdf.ln(3)
 
                 # Table headers
                 pdf.set_font('Arial', 'B', 10)
                 pdf.cell(30, 10, 'CODE', 1) #edited the name
-                pdf.cell(70, 10, 'MODULE', 1) #edited the row width and name 60 to 70
+                pdf.cell(70, 10, 'SUBJECTS', 1) #edited the row width and name 60 to 70. CHANGED MODULES TO SUBJECTS
                 pdf.cell(30, 10, 'MARKS', 1)
                 pdf.cell(20, 10, 'GRADE', 1) #edited the row width from 30 to 20
                 pdf.cell(40, 10, 'REMARKS', 1)

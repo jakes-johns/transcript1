@@ -2,12 +2,18 @@ from flask import Flask, render_template, request, send_file, flash, redirect, u
 import zipfile
 import os
 import re
+import pandas as pd
 from fpdf import FPDF
 from pathlib import Path
+import logging
+from werkzeug.utils import secure_filename
 
 
-app = Flask(__name__)  # Set correct template path)
+app = Flask(__name__)  # Set correct template path
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
+
+# Initialize logging
+logging.basicConfig(level=logging.DEBUG)
 
 def sanitize_filename(filename):
     """Remove or replace invalid characters in filenames."""
@@ -34,7 +40,7 @@ os.makedirs(TEMP_FOLDER, exist_ok=True)
 def index():
     if request.method == 'POST':
         try:
-            # Get common details (same for all students)
+            # Get common details
             school_name = request.form.get('school_name', 'Unknown School')
             department = request.form.get('department', 'UNKNOWN DEPARTMENT')
             program = request.form.get('program', 'UNKNOWN PROGRAM')
@@ -44,38 +50,89 @@ def index():
             transcript_date = request.form.get('transcript_date', 'N/A')
             remarks = request.form.get('remarks', 'No remarks provided')
             coordinator_name = request.form.get('coordinator_name', 'N/A')
-            # coordinator_sign = request.form.get('coordinator_sign', 'N/A')
             coordinator_date = request.form.get('coordinator_date', 'N/A')
             hod_name = request.form.get('hod_name', 'N/A')
-            # hod_sign = request.form.get('hod_sign', 'N/A')
             hod_date = request.form.get('hod_date', 'N/A')
 
-            # Get subject codes and names
+            # Get subject codes and names manually entered by user
             subject_codes = request.form.getlist('subject_code[]')
             subjects = request.form.getlist('subject[]')
 
-            # Get student details
-            student_names = request.form.getlist('student_name[]')
-            reg_nos = request.form.getlist('reg_no[]')
-
-            # Get marks and handle errors
+            # Initialize containers
+            student_names = []
+            reg_nos = []
             marks_list = []
-            for i in range(len(student_names)):
-                raw_marks = request.form.getlist(f'marks_{i}[]')
-                marks = []
-                for mark in raw_marks:
-                    try:
-                        marks.append(int(mark.replace(',', '').strip()))  # Remove commas before conversion
-                    except ValueError:
-                        flash(f"Invalid mark '{mark}' for student {student_names[i]}. Skipping this entry.")
-                        marks.append(0)  # Default to 0 if conversion fails
-                marks_list.append(marks)
+
+            # Check if Excel file was uploaded
+            uploaded_file = request.files.get('excel_file')
+            if uploaded_file and uploaded_file.filename.endswith(('.xlsx', '.xls')):
+                import pandas as pd
+                # Load the Excel file with multiple sheets
+                xls = pd.ExcelFile(uploaded_file)
+
+                # Check if required sheets exist
+                if 'Students' not in xls.sheet_names or 'Subjects' not in xls.sheet_names:
+                    flash("Excel file must contain both 'Students' and 'Subjects' sheets.")
+                    return redirect(url_for('index'))
+
+                # Read the sheets
+                students_df = pd.read_excel(xls, sheet_name='Students')
+                subjects_df = pd.read_excel(xls, sheet_name='Subjects')
+
+                # Validate columns in the 'Students' sheet
+                if 'Student Name' not in students_df.columns or 'Reg No' not in students_df.columns:
+                    flash("The 'Students' sheet must contain 'Student Name' and 'Reg No' columns.")
+                    return redirect(url_for('index'))
+
+                # Extract subjects from the 'Subjects' sheet
+                if 'Code' not in subjects_df.columns or 'Subject' not in subjects_df.columns:
+                    flash("The 'Subjects' sheet must contain 'Code' and 'Subject' columns.")
+                    return redirect(url_for('index'))
+
+                subject_codes = subjects_df['Code'].tolist()
+                subjects = subjects_df['Subject'].tolist()
+
+                # Extract students and their marks
+                for _, row in students_df.iterrows():
+                    student_names.append(row['Student Name'])
+                    reg_nos.append(row['Reg No'])
+
+                    student_marks = []
+                    for code in subject_codes:
+                        marks_column_name = f"{code}_marks"
+                        try:
+                            student_marks.append(int(row[marks_column_name]))
+                        except KeyError:
+                            flash(f"Missing column '{marks_column_name}' for student {row['Student Name']}")
+                            student_marks.append(0)
+                        except ValueError:
+                            flash(f"Invalid mark for subject code {code}. Skipping this entry.")
+                            student_marks.append(0)
+
+                    marks_list.append(student_marks)
+
+            else:
+                # Manual input fallback
+                student_names = request.form.getlist('student_name[]')
+                reg_nos = request.form.getlist('reg_no[]')
+
+                for i in range(len(student_names)):
+                    raw_marks = request.form.getlist(f'marks_{i}[]')
+                    marks = []
+                    for mark in raw_marks:
+                        try:
+                            cleaned_mark = str(mark).replace(',', '').strip()
+                            marks.append(int(cleaned_mark))
+                        except ValueError:
+                            flash(f"Invalid mark '{mark}' for student {student_names[i]}. Skipping this entry.")
+                            marks.append(0)
+                    marks_list.append(marks)
 
             # Generate transcripts for each student
             transcript_files = []
             for i in range(len(student_names)):
                 student_name = student_names[i]
-                reg_no = reg_nos[i].strip()  # Keep Reg No unchanged inside the transcript
+                reg_no = str(reg_nos[i]).strip()  # Keep Reg No unchanged inside the transcript
                 marks = marks_list[i]
 
                 total_marks = sum(marks)

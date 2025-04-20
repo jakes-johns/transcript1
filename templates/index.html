@@ -26,8 +26,13 @@
             {% endif %}
         {% endwith %}
 
-        <form action="/" method="post">
-            <h3>Common Details</h3>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <h3>Upload Excel File (Optional)</h3>
+            <p><em>You can upload an Excel file containing <strong>Subjects (code & name)</strong>, <strong>Student Details</strong>, and <strong>Marks</strong>.</em></p>
+            <input type="file" name="excel_file" accept=".xlsx, .xls" id="excelFile">
+
+            <hr>
+            <h3>Common Details (Required)</h3>
             <label>College Name</label>
             <input type="text" name="school_name" required>
 
@@ -35,7 +40,7 @@
             <input type="text" name="department" required>
 
             <!-- <label>Programme Name</label>
-            <input type="text" name="program" required> -->  
+            <input type="text" name="program" required> -->
 
             <label>Year Of Study</label>
             <input type="text" name="year" required>
@@ -64,17 +69,11 @@
             <label>Class Coordinator Name</label>
             <input type="text" name="coordinator_name" required>
 
-            <!-- <label>Coordinator Signature</label>
-            <input type="text" name="coordinator_sign"> -->
-
             <label>Coordinator Date</label>
             <input type="date" name="coordinator_date" required>
 
             <label>Head of Department Name</label>
             <input type="text" name="hod_name" required>
-
-            <!-- <label>HOD Signature</label>
-            <input type="text" name="hod_sign"> -->
 
             <label>HOD Date</label>
             <input type="date" name="hod_date" required>
@@ -87,6 +86,7 @@
     </div>
 
     <script>
+        // Function to add new subject inputs
         function addSubject() {
             let container = document.getElementById('subject-container');
             let div = document.createElement('div');
@@ -95,6 +95,7 @@
             container.appendChild(div);
         }
 
+        // Function to add new student data
         function addStudent() {
             let studentContainer = document.getElementById('student-container');
             let index = studentContainer.children.length;
@@ -112,12 +113,25 @@
             studentContainer.appendChild(studentDiv);
         }
 
+        // Function to add marks inputs for each student
         function addMarks(studentIndex) {
             let marksContainer = document.getElementById(`marks-container-${studentIndex}`);
             let marksDiv = document.createElement('div');
             marksDiv.innerHTML = `<input type="text" name="marks_${studentIndex}[]" placeholder="Enter Marks" required>`;
             marksContainer.appendChild(marksDiv);
         }
+
+        // Handling the Excel file upload
+        const excelInput = document.querySelector('#excelFile');
+        excelInput.addEventListener('change', function () {
+            const isFileSelected = this.files.length > 0;
+            document.getElementById('subject-container').style.display = isFileSelected ? 'none' : 'block';
+            document.getElementById('student-container').style.display = isFileSelected ? 'none' : 'block';
+            
+            // Optional: Hide the "Add" buttons too
+            document.querySelector('button[onclick="addSubject()"]').style.display = isFileSelected ? 'none' : 'inline-block';
+            document.querySelector('button[onclick="addStudent()"]').style.display = isFileSelected ? 'none' : 'inline-block';
+        });
     </script>
 </body>
 </html>

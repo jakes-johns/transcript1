@@ -67,49 +67,54 @@ def index():
             uploaded_file = request.files.get('excel_file')
             if uploaded_file and uploaded_file.filename.endswith(('.xlsx', '.xls')):
                 import pandas as pd
-                # Load the Excel file with multiple sheets
-                xls = pd.ExcelFile(uploaded_file)
+                import os
 
-                # Check if required sheets exist
-                if 'Students' not in xls.sheet_names or 'Subjects' not in xls.sheet_names:
-                    flash("Excel file must contain both 'Students' and 'Subjects' sheets.")
+                # Detect file extension
+                file_ext = os.path.splitext(uploaded_file.filename)[1].lower()
+                engine = 'openpyxl' if file_ext == '.xlsx' else 'xlrd'
+
+                try:
+                    # Load Excel with the correct engine
+                    xls = pd.ExcelFile(uploaded_file, engine=engine)
+
+                    if 'Students' not in xls.sheet_names or 'Subjects' not in xls.sheet_names:
+                        flash("Excel file must contain both 'Students' and 'Subjects' sheets.")
+                        return redirect(url_for('index'))
+
+                    students_df = pd.read_excel(xls, sheet_name='Students', engine=engine)
+                    subjects_df = pd.read_excel(xls, sheet_name='Subjects', engine=engine)
+
+                    if 'Student Name' not in students_df.columns or 'Reg No' not in students_df.columns:
+                        flash("The 'Students' sheet must contain 'Student Name' and 'Reg No' columns.")
+                        return redirect(url_for('index'))
+
+                    if 'Code' not in subjects_df.columns or 'Subject' not in subjects_df.columns:
+                        flash("The 'Subjects' sheet must contain 'Code' and 'Subject' columns.")
+                        return redirect(url_for('index'))
+
+                    subject_codes = subjects_df['Code'].tolist()
+                    subjects = subjects_df['Subject'].tolist()
+
+                    for _, row in students_df.iterrows():
+                        student_names.append(row['Student Name'])
+                        reg_nos.append(row['Reg No'])
+
+                        student_marks = []
+                        for code in subject_codes:
+                            marks_column_name = f"{code}_marks"
+                            try:
+                                student_marks.append(int(row[marks_column_name]))
+                            except KeyError:
+                                flash(f"Missing column '{marks_column_name}' for student {row['Student Name']}")
+                                student_marks.append(0)
+                            except ValueError:
+                                flash(f"Invalid mark for subject code {code}. Skipping this entry.")
+                                student_marks.append(0)
+
+                        marks_list.append(student_marks)
+                except Exception as e:
+                    flash(f"Failed to process Excel file: {str(e)}")
                     return redirect(url_for('index'))
-
-                # Read the sheets
-                students_df = pd.read_excel(xls, sheet_name='Students')
-                subjects_df = pd.read_excel(xls, sheet_name='Subjects')
-
-                # Validate columns in the 'Students' sheet
-                if 'Student Name' not in students_df.columns or 'Reg No' not in students_df.columns:
-                    flash("The 'Students' sheet must contain 'Student Name' and 'Reg No' columns.")
-                    return redirect(url_for('index'))
-
-                # Extract subjects from the 'Subjects' sheet
-                if 'Code' not in subjects_df.columns or 'Subject' not in subjects_df.columns:
-                    flash("The 'Subjects' sheet must contain 'Code' and 'Subject' columns.")
-                    return redirect(url_for('index'))
-
-                subject_codes = subjects_df['Code'].tolist()
-                subjects = subjects_df['Subject'].tolist()
-
-                # Extract students and their marks
-                for _, row in students_df.iterrows():
-                    student_names.append(row['Student Name'])
-                    reg_nos.append(row['Reg No'])
-
-                    student_marks = []
-                    for code in subject_codes:
-                        marks_column_name = f"{code}_marks"
-                        try:
-                            student_marks.append(int(row[marks_column_name]))
-                        except KeyError:
-                            flash(f"Missing column '{marks_column_name}' for student {row['Student Name']}")
-                            student_marks.append(0)
-                        except ValueError:
-                            flash(f"Invalid mark for subject code {code}. Skipping this entry.")
-                            student_marks.append(0)
-
-                    marks_list.append(student_marks)
 
             else:
                 # Manual input fallback

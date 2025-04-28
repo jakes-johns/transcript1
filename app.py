@@ -62,6 +62,7 @@ def index():
             student_names = []
             reg_nos = []
             marks_list = []
+            general_remarks = []
 
             # Check if Excel file was uploaded
             uploaded_file = request.files.get('excel_file')
@@ -98,6 +99,12 @@ def index():
                     for _, row in students_df.iterrows():
                         student_names.append(row['Student Name'])
                         reg_nos.append(row['Reg No'])
+                        # Extract General Remark for the student
+                        if 'G_REMARKS' in students_df.columns:
+                            general_remarks.append(row['G_REMARKS'])
+                        else:
+                            flash("The 'Students' sheet must contain 'G_REMARKS' column.")
+                            return redirect(url_for('index'))
 
                         student_marks = []
                         for code in subject_codes:
@@ -139,6 +146,7 @@ def index():
                 student_name = student_names[i]
                 reg_no = str(reg_nos[i]).strip()  # Keep Reg No unchanged inside the transcript
                 marks = marks_list[i]
+                g_remarks = general_remarks[i]
 
                 total_marks = sum(marks)
                 average_marks = round(total_marks / len(marks), 2)
@@ -224,11 +232,11 @@ def index():
                 # Table content
                 pdf.set_font('Arial', '', 10)
                 for code, subj, mark, grade, remark in results:
-                    pdf.cell(30, 7, code, 1, align='C')
-                    pdf.cell(70, 7, subj, 1, align='C') #edited the row width and name 60 to 70
+                    pdf.cell(30, 7, code, 1, align='L')
+                    pdf.cell(70, 7, subj, 1, align='L') #edited the row width and name 60 to 70
                     pdf.cell(30, 7, str(mark), 1, align='C')
                     pdf.cell(20, 7, grade, 1, align='C') #edited the row width from 30 to 20
-                    pdf.cell(40, 7, remark, 1, align='C')
+                    pdf.cell(40, 7, remark, 1, align='L')
                     pdf.ln()
                 # Add total row
                 pdf.set_font('Arial', 'B', 10)  # Bold for emphasis
@@ -249,7 +257,7 @@ def index():
                 pdf.ln(1)
                 
                 # General Remarks
-                pdf.cell(200, 7, f"General Remarks By Class Coordinator: {remarks}", ln=True)
+                pdf.cell(200, 7, f"General Remarks By Class Coordinator: {g_remarks}", ln=True)
 
                 # Student Signature
                 pdf.cell(100, 7, f"STUDENT'S SIGN:............................................................", ln=False)

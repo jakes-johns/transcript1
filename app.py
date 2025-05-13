@@ -222,9 +222,9 @@ def index():
 
                 # Table headers
                 pdf.set_font('Arial', 'B', 10)
-                pdf.cell(30, 10, 'CODE', 1) #edited the name
-                pdf.cell(70, 10, 'SUBJECTS', 1) #edited the row width and name 60 to 70. CHANGED MODULES TO SUBJECTS
-                pdf.cell(30, 10, 'MARKS', 1)
+                pdf.cell(25, 10, 'CODE', 1) #edited the name
+                pdf.cell(85, 10, 'SUBJECTS', 1) #edited the row width and name 60 to 70. CHANGED MODULES TO SUBJECTS
+                pdf.cell(20, 10, 'MARKS', 1)
                 pdf.cell(20, 10, 'GRADE', 1) #edited the row width from 30 to 20
                 pdf.cell(40, 10, 'REMARKS', 1)
                 pdf.ln()
@@ -232,24 +232,24 @@ def index():
                 # Table content
                 pdf.set_font('Arial', '', 10)
                 for code, subj, mark, grade, remark in results:
-                    pdf.cell(30, 7, code, 1, align='L')
-                    pdf.cell(70, 7, subj, 1, align='L') #edited the row width and name 60 to 70
-                    pdf.cell(30, 7, str(mark), 1, align='C')
+                    pdf.cell(25, 7, code, 1, align='L')
+                    pdf.cell(85, 7, subj, 1, align='L') #edited the row width and name 60 to 70
+                    pdf.cell(20, 7, str(mark), 1, align='C')
                     pdf.cell(20, 7, grade, 1, align='C') #edited the row width from 30 to 20
                     pdf.cell(40, 7, remark, 1, align='L')
                     pdf.ln()
                 # Add total row
                 pdf.set_font('Arial', 'B', 10)  # Bold for emphasis
-                pdf.cell(100, 8, 'TOTAL', 1)
-                pdf.cell(30, 8, str(total_marks), 1, align='C')
+                pdf.cell(110, 8, 'TOTAL', 1)
+                pdf.cell(20, 8, str(total_marks), 1, align='C')
                 pdf.cell(20, 8, '', 1)  # Empty grade column for total
                 pdf.cell(40, 8, '', 1)  # Empty remarks column for total
                 pdf.ln()
 
                # Add average row with grade and remarks
                 average_grade, average_remark = calculate_grade(average_marks)  # Fix missing grading for average
-                pdf.cell(100, 8, 'AVERAGE', 1)
-                pdf.cell(30, 8, str(average_marks), 1, align='C')
+                pdf.cell(110, 8, 'AVERAGE', 1)
+                pdf.cell(20, 8, str(average_marks), 1, align='C')
                 pdf.cell(20, 8, average_grade, 1, align='C')
                 pdf.cell(40, 8, average_remark, 1, align='C')
                 pdf.ln()
